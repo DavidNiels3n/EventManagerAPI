@@ -104,13 +104,13 @@ usersApi.MapPut("/{userId}", async (int userId, User updateUser, UserService use
     {
         return Results.NotFound();
     }
-    await userService.UpdateAsync(userId, existingUser);
+    await userService.UpdateAsync(userId, updateUser);
     return Results.NoContent();
 
 })
     .WithName("UpdatedUser");
 
-eventsApi.MapDelete("/{userId}", async (int userId, UserService userService) =>
+usersApi.MapDelete("/{userId}", async (int userId, UserService userService) =>
 {
     var existingEvent = await userService.GetByIdAsync(userId);
     if (existingEvent is null)
