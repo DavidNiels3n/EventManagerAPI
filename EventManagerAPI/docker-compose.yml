@@ -1,0 +1,22 @@
+version: '3.1'
+services:
+  mongohost:
+    image: mongo:7
+    container_name: mongoHost
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongohost_db:/data/db
+
+  restapi:
+    build: .
+    container_name: restapi
+    restart: always
+    ports:
+      - "8080:8080"  
+    depends_on:
+      - mongohost
+
+volumes:
+  mongohost_db:
