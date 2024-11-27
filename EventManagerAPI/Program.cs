@@ -83,7 +83,7 @@ usersApi.MapGet("/", async (UserService userService) =>
     await userService.GetAllAsync())
     .WithName("GetAllUsers");
 
-usersApi.MapGet("/{id}", async (int Userid, UserService userService) =>
+usersApi.MapGet("/{userId}", async (int Userid, UserService userService) =>
 {
     var userItem = await userService.GetByIdAsync(Userid);
     return userItem is not null ? Results.Ok(userItem) : Results.NotFound();
@@ -97,6 +97,30 @@ usersApi.MapPost("/", async (User newUser, UserService userService) =>
 })
 .WithName("CreateUser");
 
+usersApi.MapPut("/{userId}", async (int userId, User updateUser, UserService userService) =>
+{
+    var existingUser = await userService.GetByIdAsync(userId);
+    if (existingUser is null)
+    {
+        return Results.NotFound();
+    }
+    await userService.UpdateAsync(userId, existingUser);
+    return Results.NoContent();
+
+})
+    .WithName("UpdatedUser");
+
+eventsApi.MapDelete("/{userId}", async (int userId, UserService userService) =>
+{
+    var existingEvent = await userService.GetByIdAsync(userId);
+    if (existingEvent is null)
+    {
+        return Results.NotFound();
+    }
+    await userService.DeleteAsync(userId);
+    return Results.NoContent();
+})
+.WithName("DeleteUser");
 
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@::TEST::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
