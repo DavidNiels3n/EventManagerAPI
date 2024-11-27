@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Define API routes using minimal APIs
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@::EVENTS::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 var eventsApi = app.MapGroup("/api/events");
 eventsApi.MapGet("/", async (EventService eventService) =>
     await eventService.GetAllAsync())
@@ -74,12 +74,32 @@ eventsApi.MapDelete("/{id}", async (int id, EventService eventService) =>
 })
 .WithName("DeleteEvent");
 
-// Add similar endpoints for users if a UserService is implemented
-//var usersApi = app.MapGroup("/api/users");
-//usersApi.MapGet("/", async (UserService userService) =>
-  //  await userService.GetAllUsersAsync())
-  //  .WithName("GetAllUsers");
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@::USERS::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+var usersApi = app.MapGroup("/api/users");
+
+usersApi.MapGet("/", async (UserService userService) =>
+    await userService.GetAllAsync())
+    .WithName("GetAllUsers");
+
+usersApi.MapGet("/{id}", async (int Userid, UserService userService) =>
+{
+    var userItem = await userService.GetByIdAsync(Userid);
+    return userItem is not null ? Results.Ok(userItem) : Results.NotFound();
+})
+.WithName("GetUserById");
+
+usersApi.MapPost("/", async (User newUser, UserService userService) =>
+{
+    await userService.CreateAsync(newUser);
+    return Results.Created($"/api/events/{newUser.UserId}", newUser);
+})
+.WithName("CreateUser");
+
+
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@::TEST::@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // Add a simple route for health check or testing
 app.MapGet("/", () => "Event Manager API is running!");
 
