@@ -13,7 +13,7 @@ builder.Services.Configure<MongoDbSettings>(
 
 // Register services for dependency injection
 builder.Services.AddSingleton<EventService>();
-builder.Services.AddSingleton<UserService>(); // Assuming you add a UserService for user management
+builder.Services.AddSingleton<UserService>();
 
 // Enable Swagger for API documentation
 builder.Services.AddEndpointsApiExplorer();
