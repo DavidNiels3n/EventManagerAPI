@@ -6,6 +6,8 @@ USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+
 
 
 # This stage is used to build the service project

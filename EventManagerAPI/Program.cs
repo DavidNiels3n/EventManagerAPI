@@ -23,10 +23,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+
+
+
 // Enable Swagger UI in development
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
+app.UseSwagger();
     app.UseSwaggerUI();
 //}
 
@@ -40,4 +43,5 @@ app.MapEventsEndpoints();
 // Add a simple route for health check or testing
 app.MapGet("/", () => "Event Manager API is running!");
 
+app.Urls.Add("http://+:8080");
 app.Run();

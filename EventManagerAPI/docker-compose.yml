@@ -11,6 +11,8 @@ services:
 
   restapi:
     build: .
+    environment: 
+      - ASPNETCORE_URLS=http://+:8080
     container_name: restapi
     restart: always
     ports:

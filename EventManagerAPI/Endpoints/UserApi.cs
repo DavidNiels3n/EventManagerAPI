@@ -20,14 +20,20 @@ using EventManagerAPI.Models;
             })
             .WithName("GetUserById");
 
+
+
+            //testing
             usersApi.MapPost("/", async (User newUser, UserService userService) =>
             {
-                await userService.CreateAsync(newUser);
-                return Results.Created($"/api/events/{newUser.UserId}", newUser);
+            Console.WriteLine($"Received Data: {System.Text.Json.JsonSerializer.Serialize(newUser)}");
+            await userService.CreateAsync(newUser);
+            return Results.Created($"/api/users/{newUser.UserId}", newUser);
             })
             .WithName("CreateUser");
 
-            usersApi.MapPut("/{userId}", async (int userId, User updateUser, UserService userService) =>
+
+
+        usersApi.MapPut("/{userId}", async (int userId, User updateUser, UserService userService) =>
             {
                 var existingUser = await userService.GetByIdAsync(userId);
                 if (existingUser is null)
