@@ -13,7 +13,7 @@ using EventManagerAPI.Models;
                 await userService.GetAllAsync())
                 .WithName("GetAllUsers");
 
-            usersApi.MapGet("/{userId}", async (int Userid, UserService userService) =>
+            usersApi.MapGet("/{userId}", async (string Userid, UserService userService) =>
             {
                 var userItem = await userService.GetByIdAsync(Userid);
                 return userItem is not null ? Results.Ok(userItem) : Results.NotFound();
@@ -33,7 +33,7 @@ using EventManagerAPI.Models;
 
 
 
-        usersApi.MapPut("/{userId}", async (int userId, User updateUser, UserService userService) =>
+        usersApi.MapPut("/{userId}", async (string userId, User updateUser, UserService userService) =>
             {
                 var existingUser = await userService.GetByIdAsync(userId);
                 if (existingUser is null)
@@ -46,7 +46,7 @@ using EventManagerAPI.Models;
             })
                 .WithName("UpdatedUser");
 
-            usersApi.MapDelete("/{userId}", async (int userId, UserService userService) =>
+            usersApi.MapDelete("/{userId}", async (string userId, UserService userService) =>
             {
                 var existingEvent = await userService.GetByIdAsync(userId);
                 if (existingEvent is null)

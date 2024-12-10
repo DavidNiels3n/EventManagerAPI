@@ -18,16 +18,20 @@ namespace EventManagerAPI.Services
         public async Task<List<User>> GetAllAsync() =>
             await _Userscollection.Find(_ => true).ToListAsync();
 
-        public async Task<User?> GetByIdAsync(int UserId) =>
+        public async Task<User?> GetByIdAsync(string UserId) =>
             await _Userscollection.Find(e => e.UserId == UserId).FirstOrDefaultAsync();
 
-        public async Task CreateAsync(User newUser) =>
+        public async Task CreateAsync(User newUser)
+        {
+            newUser.UserId = null; //Ensures mongo can set id
             await _Userscollection.InsertOneAsync(newUser);
+        }
 
-        public async Task UpdateAsync(int UserId, User updatedUser) =>
+
+        public async Task UpdateAsync(string UserId, User updatedUser) =>
             await _Userscollection.ReplaceOneAsync(e => e.UserId == UserId, updatedUser);
 
-        public async Task DeleteAsync(int UserId) =>
+        public async Task DeleteAsync(string UserId) =>
             await _Userscollection.DeleteOneAsync(e => e.UserId == UserId);
 
     }
