@@ -14,7 +14,7 @@ using EventManagerAPI.Services;
             .WithName("GetAllEvents");
 
 
-
+        //Get by ID
         eventsApi.MapGet("/{id}", async (int id, EventService eventService) =>
         {
             var eventItem = await eventService.GetByIdAsync(id);
@@ -22,6 +22,14 @@ using EventManagerAPI.Services;
         })
         .WithName("GetEventById");
 
+
+        //Approved
+        eventsApi.MapGet("/approved", async (EventService eventService) =>
+        {
+            var approvedEvents = await eventService.GetApprovedEventsAsync();
+            return Results.Ok(approvedEvents);
+        })
+        .WithName("GetApprovedEvents");
 
 
         eventsApi.MapPost("/", async (Events newEvent, EventService eventService) =>

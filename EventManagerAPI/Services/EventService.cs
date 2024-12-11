@@ -1,4 +1,5 @@
 ﻿using EventManagerAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -17,6 +18,11 @@ namespace EventManagerAPI.Services
 
         public async Task<List<Events>> GetAllAsync() =>
             await _eventsCollection.Find(_ => true).ToListAsync();
+
+
+        public async Task<List<Events>> GetApprovedEventsAsync() =>
+            await _eventsCollection.Find(e => e.EventStatus == "Approved").ToListAsync();
+
 
         public async Task<Events?> GetByIdAsync(int id) =>
             await _eventsCollection.Find(e => e.EventId == id).FirstOrDefaultAsync();
