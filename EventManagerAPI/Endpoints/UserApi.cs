@@ -1,6 +1,7 @@
 ﻿namespace EventManagerAPI.Endpoints;
 using EventManagerAPI.Services;
 using EventManagerAPI.Models;
+using Microsoft.AspNetCore.Identity.Data;
 
     public static class UserApi
     {
@@ -20,10 +21,27 @@ using EventManagerAPI.Models;
             })
             .WithName("GetUserById");
 
+            // Login
+            usersApi.MapPost("/login", async (LoginRequest loginRequest, UserService userService) =>
+            {
+            // Attempt to find the user by their email
+            var user = await userService.GetUserByEmailAsync(loginRequest.Email);
+      
+            //Return unauthorized if user doesnt exist in db
+            if (user == null || user.UserPassword != loginRequest.Password)
+            {
+                return Results.Json(new { message = "Invalid email or password" }, statusCode: 401);
+            }
+
+            // If login is successful, return a success message with the user's ID
+            return Results.Json(new { message = "Login successful", userId = user.UserId }, statusCode: 200);
+            })
+            .WithName("LoginUser");
 
 
-            //testing
-            usersApi.MapPost("/", async (User newUser, UserService userService) =>
+
+        //Create user
+        usersApi.MapPost("/", async (User newUser, UserService userService) =>
             {
             Console.WriteLine($"Received Data: {System.Text.Json.JsonSerializer.Serialize(newUser)}");
             await userService.CreateAsync(newUser);

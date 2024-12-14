@@ -21,6 +21,12 @@ namespace EventManagerAPI.Services
         public async Task<User?> GetByIdAsync(string UserId) =>
             await _Userscollection.Find(e => e.UserId == UserId).FirstOrDefaultAsync();
 
+        //Get by email
+        public async Task<User?> GetUserByEmailAsync(string email) =>
+            await _Userscollection.Find(e => e.UserEmail == email).FirstOrDefaultAsync();
+
+
+        //Create 
         public async Task CreateAsync(User newUser)
         {
             newUser.UserId = null; //Ensures mongo can set id
