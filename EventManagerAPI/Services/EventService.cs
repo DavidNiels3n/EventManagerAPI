@@ -1,6 +1,7 @@
 ﻿using EventManagerAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace EventManagerAPI.Services
@@ -24,16 +25,19 @@ namespace EventManagerAPI.Services
             await _eventsCollection.Find(e => e.EventStatus == "Approved").ToListAsync();
 
 
-        public async Task<Events?> GetByIdAsync(int id) =>
-            await _eventsCollection.Find(e => e.EventId == id).FirstOrDefaultAsync();
+        // Get event by ID
+        public async Task<Events?> GetByIdAsync(string id) =>
+            await _eventsCollection.Find(e => e.EventId == ObjectId.Parse(id).ToString()).FirstOrDefaultAsync();
 
         public async Task CreateAsync(Events newEvent) =>
             await _eventsCollection.InsertOneAsync(newEvent);
 
-        public async Task UpdateAsync(int id, Events updatedEvent) =>
-            await _eventsCollection.ReplaceOneAsync(e => e.EventId == id, updatedEvent);
+        // Update event by ID
+        public async Task UpdateAsync(string id, Events updatedEvent) =>
+            await _eventsCollection.ReplaceOneAsync(e => e.EventId == ObjectId.Parse(id).ToString(), updatedEvent);
 
-        public async Task DeleteAsync(int id) =>
-            await _eventsCollection.DeleteOneAsync(e => e.EventId == id);
+        // Delete event by ID
+        public async Task DeleteAsync(string id) =>
+            await _eventsCollection.DeleteOneAsync(e => e.EventId == ObjectId.Parse(id).ToString());
     }
 }

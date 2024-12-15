@@ -40,14 +40,18 @@ using Microsoft.AspNetCore.Identity.Data;
 
 
 
-        //Create user
+        // Create user
         usersApi.MapPost("/", async (User newUser, UserService userService) =>
-            {
-            Console.WriteLine($"Received Data: {System.Text.Json.JsonSerializer.Serialize(newUser)}");
+        {
+            // Automatically assign the role "User" to the new user
+            newUser.Role = "EventHolder"; //Temp set to EventHolder
+
             await userService.CreateAsync(newUser);
+
             return Results.Created($"/api/users/{newUser.UserId}", newUser);
-            })
-            .WithName("CreateUser");
+        })
+        .WithName("CreateUser");
+
 
 
 
